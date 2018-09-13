@@ -4,11 +4,11 @@
 
 
 
-	废话不多说，直接进入今天的主题。
+​	废话不多说，直接进入今天的主题。
 
 
 
-	阅读过我之前写的文章的童靴，肯定知道SpringBoot整合第三方技术的时候，都会有一个xxxAutoConfiguration的自动配置类，咱们来一起找找看。其实在项目整合Mybatis的时候，需要依赖**mybatis-spring-boot-starter**包：
+​	阅读过我之前写的文章的童靴，肯定知道SpringBoot整合第三方技术的时候，都会有一个xxxAutoConfiguration的自动配置类，咱们来一起找找看。其实在项目整合Mybatis的时候，需要依赖**mybatis-spring-boot-starter**包：
 
 ```xml
 <dependency>
@@ -18,11 +18,11 @@
 </dependency>
 ```
 
-	依赖情况如下：
+​	依赖情况如下：
 
 ![](images/springboot整合mybatis的starter包.png)
 
-	在**mybatis-spring-boot-autoconfigure-xxx.jar**包中可以找到**META-INF/spring.factories**的文件，打开后可以看到里面的自动配置类：
+​	在**mybatis-spring-boot-autoconfigure-xxx.jar**包中可以找到**META-INF/spring.factories**的文件，打开后可以看到里面的自动配置类：
 
 ```properties
 # Auto Configure
@@ -30,9 +30,9 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration
 ```
 
-	
+​	
 
-	因此进入**MybatisAutoConfiguration**配置类中：
+​	因此进入**MybatisAutoConfiguration**配置类中：
 
 ```java
 @org.springframework.context.annotation.Configuration
@@ -131,9 +131,9 @@ public class MybatisAutoConfiguration {
 }
 ```
 
-	
+​	
 
-	在自动配置的时候会导入一个Properties配置类**MybatisProperties**，咱们来看一下，
+​	在自动配置的时候会导入一个Properties配置类**MybatisProperties**，咱们来看一下，
 
 ```java
 @ConfigurationProperties(prefix = MybatisProperties.MYBATIS_PREFIX)
@@ -187,11 +187,11 @@ public class MybatisProperties {
 }
 ```
 
-	该Properties配置类作用主要用于与yml/properties中以mybatis开头的属性进行一一对应，略过。
+​	该Properties配置类作用主要用于与yml/properties中以mybatis开头的属性进行一一对应，略过。
 
 
 
-	在**MybatisAutoConfiguration**自动配置类中，SpringBoot默认自动配置了两个Bean，分别是**SqlSessionFactory**和**SqlSessionTemplate**。**SqlSessionFactory**主要是将Properties配置类中的属性赋值到**SqlSessionFactoryBean**中，类似以前xml中配置的**SqlSessionFactory**:
+​	在**MybatisAutoConfiguration**自动配置类中，SpringBoot默认自动配置了两个Bean，分别是**SqlSessionFactory**和**SqlSessionTemplate**。**SqlSessionFactory**主要是将Properties配置类中的属性赋值到**SqlSessionFactoryBean**中，类似以前xml中配置的**SqlSessionFactory**:
 
 ```xml
 <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
@@ -202,7 +202,7 @@ public class MybatisProperties {
 </bean>
 ```
 
-	在创建**SqlSessionFactory**的Bean中，有段代码：
+​	在创建**SqlSessionFactory**的Bean中，有段代码：
 
 ```java
 if (configuration != null && !CollectionUtils.isEmpty(this.configurationCustomizers)) {
@@ -212,7 +212,7 @@ if (configuration != null && !CollectionUtils.isEmpty(this.configurationCustomiz
 }
 ```
 
-	在【Spring Boot】（23）、Spring Boot整合Mybatis的章节中也讲述了，通过实现Mybatis中的**ConfigurationCustomizer**接口，重写**customize**方法，达到==覆盖Mybatis中的默认配置项==的功能。
+​	在【Spring Boot】（23）、Spring Boot整合Mybatis的章节中也讲述了，通过实现Mybatis中的**ConfigurationCustomizer**接口，重写**customize**方法，达到==覆盖Mybatis中的默认配置项==的功能。
 
 ```java
 public interface ConfigurationCustomizer {
@@ -220,7 +220,7 @@ public interface ConfigurationCustomizer {
 }
 ```
 
-	参数**Configuration**即为Mybatis的配置项：
+​	参数**Configuration**即为Mybatis的配置项：
 
 ```java
 public class Configuration {
@@ -292,11 +292,11 @@ public class Configuration {
 }
 ```
 
-	具体可以看看【Spring Boot】（23）、Spring Boot整合Mybatis中的使用方式，在此就不在讲解了。
+​	具体可以看看【Spring Boot】（23）、Spring Boot整合Mybatis中的使用方式，在此就不在讲解了。
 
 
 
-	另外一个Bean为**SqlSessionTemplate**，通过**SqlSessionFactory**来生成**SqlSession**代理类：
+​	另外一个Bean为**SqlSessionTemplate**，通过**SqlSessionFactory**来生成**SqlSession**代理类：
 
 ```java
 public class SqlSessionTemplate implements SqlSession, DisposableBean {
@@ -332,7 +332,7 @@ public class SqlSessionTemplate implements SqlSession, DisposableBean {
 
 
 
-	在**MybatisAutoConfiguration**自动配置类中，有个静态内部类 **AutoConfiguredMapperScannerRegistrar** 
+​	在**MybatisAutoConfiguration**自动配置类中，有个静态内部类 **AutoConfiguredMapperScannerRegistrar** 
 
 ```java
 public static class AutoConfiguredMapperScannerRegistrar
@@ -394,11 +394,11 @@ public static class MapperScannerRegistrarNotFoundConfiguration {
 }
 ```
 
-	它主要用于扫描带有@Mapper注解的mapper接口，暂时先不讲这个内部类，后面再讲。
+​	它主要用于扫描带有@Mapper注解的mapper接口，暂时先不讲这个内部类，后面再讲。
 
 
 
-	咱们先来讲下Mybatis的**MapperScannerRegistrar**，它的功能同上述功能刚好相反。学过SpringBoot整合Mybatis的童靴，肯定知道一个注解**@MapperScan**，来看看它的签名：
+​	咱们先来讲下Mybatis的**MapperScannerRegistrar**，它的功能同上述功能刚好相反。学过SpringBoot整合Mybatis的童靴，肯定知道一个注解**@MapperScan**，来看看它的签名：
 
 ```java
 @Retention(RetentionPolicy.RUNTIME)
@@ -410,7 +410,7 @@ public @interface MapperScan {
 }
 ```
 
-	可以看到，如果使用了**@MapperScan**注解，则项目会导入**MapperScannerRegistrar**：
+​	可以看到，如果使用了**@MapperScan**注解，则项目会导入**MapperScannerRegistrar**：
 
 ```java
 public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, ResourceLoaderAware {
@@ -479,7 +479,7 @@ public class MapperScannerRegistrar implements ImportBeanDefinitionRegistrar, Re
 }
 ```
 
-	一旦使用**@MapperScan**注解，则回在**MapperScannerRegistrar#registerBeanDefinitions**方法中会解析**@MapperScan**注解的属性，加载basePackages，并进行包扫描，调用==doScan==方法。
+​	一旦使用**@MapperScan**注解，则回在**MapperScannerRegistrar#registerBeanDefinitions**方法中会解析**@MapperScan**注解的属性，加载basePackages，并进行包扫描，调用==doScan==方法。
 
 ```java
 public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
